@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cyber Threat Detection</title>
+</head>
+<body>
+    <h2>Cyber Threat Detection System</h2>
+
+    <form action="/predict" method="post">
+        <input type="number" name="duration" placeholder="Duration"><br><br>
+        <input type="number" name="src_bytes" placeholder="Source Bytes"><br><br>
+        <input type="number" name="dst_bytes" placeholder="Destination Bytes"><br><br>
+
+        <button type="submit">Check Threat</button>
+    </form>
+
+    <h3>{{ result }}</h3>
+</body>
+</html>

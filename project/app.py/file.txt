@@ -1,0 +1,36 @@
+from flask import Flask, render_template, request
+import joblib
+import pandas as pd
+
+app = Flask(__name__)
+
+model = joblib.load("models/cyber_model.pkl")
+anomaly_model = joblib.load("models/anomaly_model.pkl")
+
+@app.route('/')
+def home():
+    return render_template("index.html")
+
+@app.route('/predict', methods=['POST'])
+def predict():
+    duration = float(request.form['duration'])
+    src_bytes = float(request.form['src_bytes'])
+    dst_bytes = float(request.form['dst_bytes'])
+
+    data = pd.DataFrame([[duration, src_bytes, dst_bytes]],
+                        columns=["duration", "src_bytes", "dst_bytes"])
+
+    pred = model.predict(data)
+    anomaly = anomaly_model.predict(data)
+
+    if pred[0] == 1:
+        result = "Malicious Traffic 🚨"
+    elif anomaly[0] == -1:
+        result = "Anomaly Detected ⚠"
+    else:
+        result = "Normal Traffic ✅"
+
+    return render_template("index.html", result=result)
+
+if __name__ == "__main__":
+    app.run(debug=True)

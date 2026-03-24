@@ -1,0 +1,13 @@
+import joblib
+import pandas as pd
+
+model = joblib.load("../models/model.pkl")
+
+def predict(data):
+    df = pd.DataFrame([data])
+    result = model.predict(df)
+    
+    if result[0] == 0:
+        return "Normal Traffic"
+    else:
+        return "Malicious Activity"
